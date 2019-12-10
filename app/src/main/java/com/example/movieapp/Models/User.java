@@ -1,19 +1,23 @@
 package com.example.movieapp.Models;
 
 public class User {
-    String userId;
-    String userName;
-    String userEmail;
-    String password;
 
-    public User(String userId, String userName, String userEmail, String password) {
+    private int userId;
+    private String userName;
+    private String userEmail;
+    private String password;
+
+    public User(){
+    }
+
+    public User(int userId, String userName, String userEmail, String password) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
         this.password = password;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
@@ -29,7 +33,7 @@ public class User {
         return password;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
