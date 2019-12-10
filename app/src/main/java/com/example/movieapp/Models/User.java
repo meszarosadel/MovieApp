@@ -1,19 +1,34 @@
 package com.example.movieapp.Models;
 
 public class User {
-    String userId;
-    String userName;
-    String userEmail;
-    String password;
 
-    public User(String userId, String userName, String userEmail, String password) {
+    public static final String TABLE_NAME = "Users";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_EMAIL = "email";
+    public static final String COLUMN_PASSWORD = "passwrod";
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_NAME + " TEXT, "
+            + COLUMN_EMAIL + " TEXT, "
+            +COLUMN_PASSWORD + " TEXT )";
+
+    private int userId;
+    private String userName;
+    private String userEmail;
+    private String password;
+
+    public User(){
+    }
+
+    public User(int userId, String userName, String userEmail, String password) {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
         this.password = password;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
@@ -29,7 +44,7 @@ public class User {
         return password;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
