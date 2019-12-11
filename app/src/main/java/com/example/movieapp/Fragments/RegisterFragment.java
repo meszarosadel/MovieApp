@@ -3,12 +3,15 @@ package com.example.movieapp.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.movieapp.Database.DatabaseHelper;
@@ -21,6 +24,7 @@ public class RegisterFragment extends Fragment {
     Button btn_register;
     User user;
     DatabaseHelper databaseHelper;
+    TextView tv_goToLogin;
 
 
     @Override
@@ -32,6 +36,7 @@ public class RegisterFragment extends Fragment {
         et_email = v.findViewById(R.id.et_email);
         et_password = v.findViewById(R.id.et_password);
         btn_register = v.findViewById(R.id.btn_register);
+        tv_goToLogin = v.findViewById(R.id.tv_goToLogin);
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +69,17 @@ public class RegisterFragment extends Fragment {
                 else{
                     Toast.makeText(getActivity(), "Unsuccessful registration", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        tv_goToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new LoginFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_login, fragment);
+                fragmentTransaction.commit();
             }
         });
 
