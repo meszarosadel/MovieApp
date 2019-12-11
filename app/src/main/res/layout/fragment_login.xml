@@ -5,42 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color5"
+    android:id="@+id/fragment_login"
     tools:context=".Fragments.LoginFragment">
 
     <TextView
         android:id="@+id/tv_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="25dp"
         android:text="Login"
-        android:textSize="60dp"
-        android:textColor="@color/color2"
         android:textAlignment="center"
+        android:textColor="@color/color2"
+        android:textSize="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_userName"
+        android:id="@+id/et_userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
-        android:hint="username"
+        android:hint="email"
         android:inputType="textPersonName"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_userName" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_userEmail" />
 
     <TextView
-        android:id="@+id/tv_userName"
+        android:id="@+id/tv_userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Username"
-        android:textSize="23dp"
+        android:layout_marginTop="20dp"
+        android:text="Email"
         android:textColor="@color/color1"
+        android:textSize="23dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_login" />
@@ -49,39 +50,52 @@
         android:id="@+id/tv_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="Password"
-        android:textSize="23dp"
         android:textColor="@color/color1"
+        android:textSize="23dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_userName" />
+        app:layout_constraintTop_toBottomOf="@+id/et_userEmail" />
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="password"
-        android:textAlignment="center"
         android:inputType="textPassword"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_password" />
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="138dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="190dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/roundcolor2"
         android:text="Login"
         android:textColor="@color/color4"
         android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_goToRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_goToRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/color1"
+        android:text="Not registred? Sign up here!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_register" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
