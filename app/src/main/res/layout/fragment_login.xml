@@ -12,11 +12,11 @@
         android:id="@+id/tv_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="25dp"
         android:text="Login"
-        android:textSize="60dp"
-        android:textColor="@color/color2"
         android:textAlignment="center"
+        android:textColor="@color/color2"
+        android:textSize="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +38,7 @@
         android:id="@+id/tv_userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:text="Email"
         android:textColor="@color/color1"
         android:textSize="23dp"
@@ -73,17 +73,17 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="138dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="190dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/roundcolor2"
         android:text="Login"
         android:textColor="@color/color4"
         android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_goToRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_goToRegister"
