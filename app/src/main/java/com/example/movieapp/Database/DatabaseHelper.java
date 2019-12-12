@@ -13,6 +13,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static DatabaseHelper instance;
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "MovieApp.db";
     public static final String TABLE_USER = "Users";
@@ -27,8 +28,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             +COLUMN_USER_PASSWORD + " TEXT )";
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
 
-    public DatabaseHelper(Context context){
+    private DatabaseHelper(Context context){
         super(context,DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static DatabaseHelper getInstance(Context context){
+        if(instance == null){
+            instance = new DatabaseHelper(context);
+        }
+        return instance;
     }
 
     @Override
