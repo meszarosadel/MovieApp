@@ -1,5 +1,6 @@
 package com.example.movieapp.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -22,7 +23,7 @@ public class RegisterFragment extends Fragment {
 
     EditText et_email, et_username,et_password;
     Button btn_register;
-    User user;
+    User user = new User();
     DatabaseHelper databaseHelper;
     TextView tv_goToLogin;
 
@@ -37,6 +38,7 @@ public class RegisterFragment extends Fragment {
         et_password = v.findViewById(R.id.et_password);
         btn_register = v.findViewById(R.id.btn_register);
         tv_goToLogin = v.findViewById(R.id.tv_goToLogin);
+        databaseHelper = DatabaseHelper.getInstance(getContext());
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +68,9 @@ public class RegisterFragment extends Fragment {
                     user.setPassword(password);
                     databaseHelper.addUser(user);
                     Toast.makeText(getActivity(), "Successful registration", Toast.LENGTH_SHORT).show();
+                    et_username.setText("");
+                    et_email.setText("");
+                    et_password.setText("");
                     }
                     else{
                         Toast.makeText(getActivity(), "This email was registered", Toast.LENGTH_SHORT).show();

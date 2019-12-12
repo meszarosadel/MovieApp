@@ -1,5 +1,6 @@
 package com.example.movieapp.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ public class LoginFragment extends Fragment {
     TextView tv_goToRegister;
     Button btn_login;
     EditText et_userEmail, et_password;
-    DatabaseHelper databaseHelper;
+    DatabaseHelper databaseHelper ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class LoginFragment extends Fragment {
         btn_login = v.findViewById(R.id.btn_login);
         et_userEmail = v.findViewById(R.id.et_userEmail);
         et_password = v.findViewById(R.id.et_password);
+        databaseHelper = DatabaseHelper.getInstance(getContext());
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
