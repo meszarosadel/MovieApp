@@ -17,4 +17,5 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frame_id, new LoginFragment());
         transaction.commit();
     }
+
 }
