@@ -60,11 +60,16 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(getActivity(),"Field are empty", Toast.LENGTH_SHORT).show();
                 }
                 else if(!(username.isEmpty() && email.isEmpty() && password.isEmpty())){
+                    if(!databaseHelper.checkUser(email)){
                     user.setUserName(username);
                     user.setUserEmail(email);
                     user.setPassword(password);
                     databaseHelper.addUser(user);
                     Toast.makeText(getActivity(), "Successful registration", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getActivity(), "This email was registered", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
                     Toast.makeText(getActivity(), "Unsuccessful registration", Toast.LENGTH_SHORT).show();
