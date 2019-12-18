@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -28,8 +29,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.movieapp.Database.DatabaseHelper;
+import com.example.movieapp.Database.ProfileImage;
+import com.example.movieapp.Models.User;
 import com.example.movieapp.R;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,17 +50,30 @@ public class ProfileFragment extends Fragment {
 
     ImageView img_v;
     Button btn_save, btn_choose_image;
-    TextView tv_password;
+    TextView tv_password, tv_name;
+    String email;
+    User user;
+    DatabaseHelper databaseHelper;
+    Bitmap bm;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            email = getArguments().getString("email");
+        }
         img_v = view.findViewById(R.id.img_v);
         btn_save = view.findViewById(R.id.btn_save);
         btn_choose_image = view.findViewById(R.id.btn_choose_image);
         tv_password = view.findViewById(R.id.tv_password);
+        tv_name = view.findViewById(R.id.tv_name);
+        databaseHelper = databaseHelper.getInstance(getContext());
+        user = databaseHelper.getUserByEmail(email);
+        tv_name.append(user.getUserName());
+
 
         btn_choose_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +104,7 @@ public class ProfileFragment extends Fragment {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                saveToInternalStorage();
             }
         });
         return view;
@@ -110,7 +129,47 @@ public class ProfileFragment extends Fragment {
                     e.printStackTrace();
                 }
                 img_v.setImageBitmap(bitmapImage);
+                bm = bitmapImage;
             }
     }
+    }
+
+    public void saveToInternalStorage( ){
+        ContextWrapper cw = new ContextWrapper(getActivity());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,"profile.jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //return directory.getAbsolutePath();
+    }
+
+    public boolean loadImageFromStorage(String path, ImageView img)
+    {
+        try {
+            File f=new File(path, "profile.jpg");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            img.setImageBitmap(b);
+            return true;
+        }
+        catch (FileNotFoundException e)
+        {
+            return  false;
+        }
+
     }
 }
