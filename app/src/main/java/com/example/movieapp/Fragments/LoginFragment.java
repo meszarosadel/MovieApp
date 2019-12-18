@@ -1,8 +1,5 @@
 package com.example.movieapp.Fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -33,7 +30,7 @@ public class LoginFragment extends Fragment {
         tv_goToRegister = v.findViewById(R.id.tv_goToRegister);
         btn_login = v.findViewById(R.id.btn_login);
         et_userEmail = v.findViewById(R.id.et_userEmail);
-        et_password = v.findViewById(R.id.et_password);
+        et_password = v.findViewById(R.id.et_new_password);
         databaseHelper = DatabaseHelper.getInstance(getContext());
 
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +52,9 @@ public class LoginFragment extends Fragment {
                 else if(!(email.isEmpty() && password.isEmpty())){
                     if(databaseHelper.checkUser(email, password)){
                         Fragment fragment = new HomeFragment();
+                        Bundle args = new Bundle();
+                        args.putString("email", email);
+                        fragment.setArguments(args);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.frame_id, fragment);
