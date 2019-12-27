@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             fragment.setArguments(args);
             setContentView(R.layout.activity_main);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_id, new ProfileFragment());
+            transaction.replace(R.id.frame_id, fragment);
             transaction.commit();
         }
         if (item.getItemId() == R.id.cinema_menu){
