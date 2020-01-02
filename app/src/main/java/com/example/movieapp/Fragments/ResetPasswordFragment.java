@@ -3,6 +3,8 @@ package com.example.movieapp.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,22 @@ public class ResetPasswordFragment extends Fragment {
                         user = databaseHelper.getUserByEmail(email);
                         user.setPassword(newpassword);
                         databaseHelper.updateUser(user);
+                        Toast.makeText(getActivity(),"Your password was changed!", Toast.LENGTH_SHORT).show();
+
+                        Fragment fragment = new ProfileFragment();
+                        Bundle args = new Bundle();
+                        args.putString("email", email);
+                        fragment.setArguments(args);
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.frame_id, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                    else if( !(databaseHelper.checkUser(email, oldpassword))) {
+                        et_old_psw.setText("");
+                        et_new_psw.setText("");
+                        Toast.makeText(getActivity(),"Your old password isn't correct!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

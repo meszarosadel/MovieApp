@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
 
     ImageView img_v;
     Button btn_save, btn_choose_image;
-    TextView tv_password, tv_name;
+    TextView tv_password, tv_name, tv_email;
     String email;
     User user;
     DatabaseHelper databaseHelper;
@@ -70,9 +70,11 @@ public class ProfileFragment extends Fragment {
         btn_choose_image = view.findViewById(R.id.btn_choose_image);
         tv_password = view.findViewById(R.id.tv_password);
         tv_name = view.findViewById(R.id.tv_name);
+        tv_email = view.findViewById(R.id.tv_email);
         databaseHelper = databaseHelper.getInstance(getContext());
         user = databaseHelper.getUserByEmail(email);
         tv_name.append(user.getUserName());
+        tv_email.append(email);
 
 
         btn_choose_image.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +95,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new ResetPasswordFragment();
+                Bundle args = new Bundle();
+                args.putString("email", email);
+                fragment.setArguments(args);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.frame_id, fragment);
@@ -105,6 +110,16 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveToInternalStorage();
+
+                Fragment fragment = new HomeFragment();
+                Bundle args = new Bundle();
+                args.putString("email", email);
+                fragment.setArguments(args);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_id, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
         return view;
