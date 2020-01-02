@@ -18,11 +18,17 @@ import android.view.ViewGroup;
 import com.example.movieapp.R;
 
 public class HomeFragment extends Fragment {
+    private static String email;
+    //String email;
 
        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+           Bundle bundle = getArguments();
+           if (bundle != null){
+               email = getArguments().getString("email");
+           }
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -43,4 +49,10 @@ public class HomeFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+    public static String getParameters(){
+           return email;
+
+    }
 }
+

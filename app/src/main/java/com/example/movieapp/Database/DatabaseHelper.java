@@ -94,6 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
+
     public void updateUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -156,4 +157,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    public User getUserByEmail(String email){
+        User user = new User();
+        String[] columns = {
+                COLUMN_USER_ID,
+                COLUMN_USER_NAME,
+                COLUMN_USER_EMAIL,
+                COLUMN_USER_PASSWORD
+        };
+        String selection = COLUMN_USER_EMAIL + " = ?";
+        String[] selectionArgs = {email};
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USER, //Table to query
+                columns, //columns to return
+                selection, //columns for the Where cluse
+                selectionArgs, //The values for the WHERE clause
+                null, //group the rows
+                null,  //filter by row groups
+                null);  //The sort order
+        if(cursor.moveToFirst()){
+                user.setUserId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_ID))));
+                user.setUserName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
+                user.setUserEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
+                user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.movieapp.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -35,7 +34,7 @@ public class RegisterFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_register, container,false);
         et_username = v.findViewById(R.id.et_userEmail);
         et_email = v.findViewById(R.id.et_email);
-        et_password = v.findViewById(R.id.et_password);
+        et_password = v.findViewById(R.id.et_new_password);
         btn_register = v.findViewById(R.id.btn_register);
         tv_goToLogin = v.findViewById(R.id.tv_goToLogin);
         databaseHelper = DatabaseHelper.getInstance(getContext());
