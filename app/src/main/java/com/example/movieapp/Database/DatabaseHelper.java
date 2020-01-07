@@ -5,7 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.example.movieapp.MainActivity;
+import com.example.movieapp.Models.Movie;
 import com.example.movieapp.Models.User;
 
 import java.util.ArrayList;
@@ -14,19 +17,36 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper instance;
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "MovieApp.db";
     public static final String TABLE_USER = "Users";
     public static final String COLUMN_USER_ID = "id";
     public static final String COLUMN_USER_NAME = "name";
     public static final String COLUMN_USER_EMAIL = "email";
     public static final String COLUMN_USER_PASSWORD = "passwrod";
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_USER + "("
+    public static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "("
             + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_USER_NAME + " TEXT, "
             + COLUMN_USER_EMAIL + " TEXT, "
             +COLUMN_USER_PASSWORD + " TEXT )";
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
+
+
+    public static final String TABLE_MOVIE = "movie";
+    public static final String COLUMN_MOVIE_ID = "movie_id";
+    public static final String COLUMN_MOVIE_TITLE = "title";
+    public static final String COLUMN_MOVIE_OVERVIEW = "overview";
+    public static final String COLUMN_MOVIE_POSTER_PATH = "poster_path";
+    public static final String COLUMN_MOVIE_USER_ID = "user_id";
+    public static final String CREATE_MOVIE_TABLE =
+            "CREATE TABLE " + TABLE_MOVIE + " ("
+                    + COLUMN_MOVIE_ID + " INTEGER PRIMARY KEY, "
+                    + COLUMN_MOVIE_TITLE + " TEXT, "
+                    + COLUMN_MOVIE_OVERVIEW + " TEXT, "
+                    + COLUMN_MOVIE_POSTER_PATH + " TEXT, "
+                    + COLUMN_MOVIE_USER_ID + " INTEGER"
+                    + ")";
+    private String DROP_MOVIE_TABLE = "DROP TABLE IF EXISTS " + TABLE_MOVIE;
 
     private DatabaseHelper(Context context){
         super(context,DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,12 +61,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_MOVIE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DROP_USER_TABLE);
+        db.execSQL(DROP_MOVIE_TABLE);
         onCreate(db);
     }
 
@@ -184,5 +206,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return user;
+    }
+
+    public void addMovie(Movie movie){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_MOVIE_ID, movie.getId());
+        values.put(COLUMN_MOVIE_TITLE, movie.getTitle());
+        values.put(COLUMN_MOVIE_OVERVIEW, movie.getOverview());
+        values.put(COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
+        values.put(COLUMN_MOVIE_USER_ID, MainActivity.currentUserID);
+
+        db.insert(TABLE_MOVIE, null, values);
+        db.close();
+    }
+
+    public List<Movie> getMovies(){
+        List<Movie> movies = new ArrayList<>();
+
+        String[] projection = new String[]{COLUMN_MOVIE_ID, COLUMN_MOVIE_TITLE, COLUMN_MOVIE_OVERVIEW, COLUMN_MOVIE_POSTER_PATH};
+        String[] selectionArgs = new String[]{String.valueOf(MainActivity.currentUserID)};
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_MOVIE,
+                projection, COLUMN_MOVIE_USER_ID + " =? ", selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+
+            while(cursor.moveToNext()){
+                Movie movie = new Movie(cursor.getInt(cursor.getColumnIndex(COLUMN_MOVIE_ID)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_MOVIE_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_MOVIE_OVERVIEW)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_MOVIE_POSTER_PATH)));
+
+                movies.add(movie);
+            }
+
+            cursor.close();
+            db.close();
+            return movies;
+        }
+
+        cursor.close();
+        db.close();
+        return null;
+    }
+
+    public void deleteMovie(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = COLUMN_MOVIE_ID + " =? and " + COLUMN_MOVIE_USER_ID + " =?";
+        String[] selectionArgs = new String[]{Integer.toString(id), Integer.toString(MainActivity.currentUserID)};
+        db.delete(TABLE_MOVIE, whereClause, selectionArgs);
+        db.close();
     }
 }

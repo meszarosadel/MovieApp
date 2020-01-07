@@ -14,8 +14,13 @@ import android.view.MenuItem;
 import com.example.movieapp.Fragments.HomeFragment;
 import com.example.movieapp.Fragments.LoginFragment;
 import com.example.movieapp.Fragments.ProfileFragment;
+import com.example.movieapp.Models.Movie;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static FragmentManager mFragmentManager;
+    public static String currentUser;
+    public static int currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +47,14 @@ public class MainActivity extends AppCompatActivity {
             transaction.replace(R.id.frame_id, fragment);
             transaction.commit();
         }
-        if (item.getItemId() == R.id.cinema_menu){
-            Log.d(MainActivity.class.getSimpleName(), "cinema menu");
-        }
         if (item.getItemId() == R.id.top_menu){
             Log.d(MainActivity.class.getSimpleName(), "top menu");
         }
         Log.d(MainActivity.class.getSimpleName(), ""+item.getItemId());
         return super.onOptionsItemSelected(item);
         }
+
+    public static void showDetails(Movie movie){
+
+    }
 }
