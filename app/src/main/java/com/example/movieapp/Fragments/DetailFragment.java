@@ -3,6 +3,8 @@ package com.example.movieapp.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +44,7 @@ public class DetailFragment extends Fragment {
     private RecyclerView rv_related_movies;
     private TextView tv_details_title;
     private TextView tv_details_overview;
-    private Button btn_favorite;
+    private Button btn_favorite, btn_exit;
 
     private RecyclerView.LayoutManager galleryLayoutManager;
     private RecyclerView.LayoutManager relatedLayoutManager;
@@ -67,6 +69,7 @@ public class DetailFragment extends Fragment {
         tv_details_title = view.findViewById(R.id.tv_details_title);
         tv_details_overview = view.findViewById(R.id.tv_details_overview);
         btn_favorite = view.findViewById(R.id.btn_favortie);
+        btn_exit = view.findViewById(R.id.btn_exit);
 
         databaseHelper = databaseHelper.getInstance(getContext());
         favoritMovieList = databaseHelper.getMovies();
@@ -93,9 +96,24 @@ public class DetailFragment extends Fragment {
 
         tv_details_title.setText(movie.getTitle());
         tv_details_overview.setText(movie.getOverview());
-
         getImages();
         getSimilarMovies();
+
+        btn_exit.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new HomeFragment();
+                Bundle args = new Bundle();
+                args.putString("email", HomeFragment.getParameters());
+                fragment.setArguments(args);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_id, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
         return view;
     }
