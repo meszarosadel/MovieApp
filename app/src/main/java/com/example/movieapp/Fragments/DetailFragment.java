@@ -1,7 +1,5 @@
 package com.example.movieapp.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.movieapp.Adapters.ImageAdapter;
 import com.example.movieapp.Adapters.RelatedMovieListAdapter;
 import com.example.movieapp.BuildConfig;
 import com.example.movieapp.Database.DatabaseHelper;
@@ -45,7 +44,7 @@ public class DetailFragment extends Fragment {
     private RecyclerView.LayoutManager galleryLayoutManager;
     private RecyclerView.LayoutManager relatedLayoutManager;
     private RelatedMovieListAdapter relatedListAdapter;
-    //private GalleryAdapter galleryAdapter;
+    private ImageAdapter galleryAdapter;
 
     private DatabaseHelper databaseHelper;
     public DetailFragment() {
@@ -60,10 +59,11 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_detail, container, false);
 
-        recyclerViewRelatedMovies = view.findViewById(R.id.recyclerView_Details_RelatedMovies);
-        textViewTitle = view.findViewById(R.id.textView_Details_Title);
-        textViewOverview = view.findViewById(R.id.textView_Details_Overview);
-        buttonSave = view.findViewById(R.id.button_Details_Save);
+        recyclerViewRelatedMovies = view.findViewById(R.id.rv_related_movies);
+        recyclerViewGallery = view.findViewById(R.id.recyclerView_Details_Gallery);
+        textViewTitle = view.findViewById(R.id.tv_details_title);
+        textViewOverview = view.findViewById(R.id.tv_details_overview);
+        buttonSave = view.findViewById(R.id.btn_favortie);
 
         databaseHelper = databaseHelper.getInstance(getContext());
 
@@ -84,6 +84,29 @@ public class DetailFragment extends Fragment {
     }
 
     private void getImages(){
+        GetQueries getQuery = Network.getRetrofit().create(GetQueries.class);
+
+        imageCall = getQuery.getImages(movie.getId(), BuildConfig.API_KEY);
+
+        imageCall.enqueue(new Callback<Images>() {
+            @Override
+            public void onResponse(Call<Images> call, Response<Images> response) {
+                if (galleryAdapter == null) {
+                    galleryLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    galleryAdapter = new ImageAdapter(response.body(), getContext());
+                    recyclerViewGallery.setLayoutManager(galleryLayoutManager);
+                    recyclerViewGallery.setAdapter(galleryAdapter);
+                } else {
+                    galleryAdapter.updateImages(response.body());
+                    galleryAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Images> call, Throwable t) {
+
+            }
+        });
     }
 
     private void getSimilarMovies(){
