@@ -45,12 +45,9 @@ public class HomeFragment extends Fragment {
     private Call<Page> call;
     private String searchQuery;
 
-
-
        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
            View view = inflater.inflate(R.layout.fragment_home, container, false);
            Bundle bundle = getArguments();
            if (bundle != null){
@@ -155,15 +152,12 @@ public class HomeFragment extends Fragment {
                     adapter = new MovieListAdapter(response.body().getResults(), getContext());
                     recyclerViewResults.setLayoutManager(layoutManager);
                     recyclerViewResults.setAdapter(adapter);
-
                 }
                 else{
                     adapter.updateMovies(response.body().getResults());
                     adapter.notifyDataSetChanged();
                 }
-
             }
-
             @Override
             public void onFailure(Call<Page> call, Throwable t) {
                 Toast.makeText(getContext(), "An error occurred.", Toast.LENGTH_LONG).show();

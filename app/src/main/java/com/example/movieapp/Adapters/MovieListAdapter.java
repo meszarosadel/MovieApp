@@ -65,7 +65,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     @Override
     public int getItemCount() {
+        if(movies != null)
         return movies.size();
+        return 0;
     }
 
     public void updateMovies(List<Movie> movies){

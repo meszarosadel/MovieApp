@@ -23,6 +23,7 @@ public class LoginFragment extends Fragment {
     Button btn_login;
     EditText et_userEmail, et_password;
     DatabaseHelper databaseHelper ;
+    public String email;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class LoginFragment extends Fragment {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               String email = et_userEmail.getText().toString();
+               email = et_userEmail.getText().toString();
                String password = et_password.getText().toString();
                 if (email.isEmpty()){
                     et_userEmail.setError("Please enter your email");
