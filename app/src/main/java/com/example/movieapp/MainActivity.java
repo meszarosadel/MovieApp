@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.movieapp.Fragments.DetailFragment;
 import com.example.movieapp.Fragments.HomeFragment;
 import com.example.movieapp.Fragments.LoginFragment;
 import com.example.movieapp.Fragments.ProfileFragment;
@@ -55,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public static void showDetails(Movie movie){
-
+        mFragmentManager.beginTransaction()
+                .replace(R.id.frame_id, new DetailFragment(movie), null)
+                .addToBackStack(null)
+                .commit();
+    }
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            this.finish();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.movieapp.Adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.movieapp.MainActivity;
+import com.example.movieapp.Fragments.HomeFragment;
 import com.example.movieapp.Models.Movie;
 import com.example.movieapp.R;
 
@@ -55,7 +54,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.showDetails(movies.get(position));
+                HomeFragment.showDetails(movies.get(position));
             }
         });
 
@@ -72,4 +71,6 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     public void updateMovies(List<Movie> movies){
         this.movies = movies;
     }
+
+
 }

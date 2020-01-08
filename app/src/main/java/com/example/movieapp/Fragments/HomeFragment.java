@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.example.movieapp.Adapters.MovieListAdapter;
 import com.example.movieapp.BuildConfig;
 import com.example.movieapp.Interfaces.GetQueries;
+import com.example.movieapp.Models.Movie;
 import com.example.movieapp.Models.Page;
 import com.example.movieapp.R;
 import com.example.movieapp.Utils.Network;
@@ -31,6 +34,7 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     private static String email;
+    private static FragmentManager fragmentManager;
     private SearchView searchView;
     private RecyclerView recyclerViewResults;
 
@@ -42,6 +46,7 @@ public class HomeFragment extends Fragment {
     private String searchQuery;
 
 
+
        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class HomeFragment extends Fragment {
            if (bundle != null){
                email = getArguments().getString("email");
            }
+           fragmentManager = getActivity().getSupportFragmentManager();
            searchView = view.findViewById(R.id.sw_homeSearch);
            recyclerViewResults = view.findViewById(R.id.recyclerView_Home_SearchResults);
            textViewTitle = view.findViewById(R.id.textView_Home_Title);
@@ -163,6 +169,19 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), "An error occurred.", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public static void showDetails(Movie movie){
+        String email = HomeFragment.getParameters();
+        Fragment fragment = new DetailFragment(movie);
+        Bundle args = new Bundle();
+        args.putString("email", email);
+        fragment.setArguments(args);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_id, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 }
 
