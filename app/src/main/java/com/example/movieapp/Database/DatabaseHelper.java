@@ -17,18 +17,21 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper instance;
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "MovieApp.db";
     public static final String TABLE_USER = "Users";
     public static final String COLUMN_USER_ID = "id";
     public static final String COLUMN_USER_NAME = "name";
     public static final String COLUMN_USER_EMAIL = "email";
     public static final String COLUMN_USER_PASSWORD = "passwrod";
+    public static final String COLUMN_USER_PROFILE_PICTURE = "profile_picture";
     public static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + "("
             + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_USER_NAME + " TEXT, "
             + COLUMN_USER_EMAIL + " TEXT, "
-            +COLUMN_USER_PASSWORD + " TEXT )";
+            +COLUMN_USER_PASSWORD + " TEXT, "
+            + COLUMN_USER_PROFILE_PICTURE + " BLOB"
+            + ")";
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
 
 
@@ -79,6 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USER_NAME, user.getUserName());
         values.put(COLUMN_USER_EMAIL, user.getUserEmail());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
+        values.put(COLUMN_USER_PROFILE_PICTURE, user.getProfilePicture());
 
         db.insert(TABLE_USER,null,values);
         db.close();
@@ -89,7 +93,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_ID,
                 COLUMN_USER_NAME,
                 COLUMN_USER_EMAIL,
-                COLUMN_USER_PASSWORD
+                COLUMN_USER_PASSWORD,
+                COLUMN_USER_PROFILE_PICTURE
         };
         String sortOrder = COLUMN_USER_NAME + " ASC";
         List<User> userList = new ArrayList<User>();
@@ -108,6 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 user.setUserName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
                 user.setUserEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
                 user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
+                user.setProfilePicture(cursor.getBlob(cursor.getColumnIndex(COLUMN_USER_PROFILE_PICTURE)));
                 userList.add(user);
             }while (cursor.moveToNext());
         }
@@ -123,6 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USER_NAME, user.getUserName());
         values.put(COLUMN_USER_EMAIL, user.getUserEmail());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
+        values.put(COLUMN_USER_PROFILE_PICTURE, user.getProfilePicture());
         //update the row
         db.update(TABLE_USER, values,COLUMN_USER_ID + " =?",
                 new String[]{String.valueOf(user.getUserId())});
@@ -185,7 +192,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_ID,
                 COLUMN_USER_NAME,
                 COLUMN_USER_EMAIL,
-                COLUMN_USER_PASSWORD
+                COLUMN_USER_PASSWORD,
+                COLUMN_USER_PROFILE_PICTURE
         };
         String selection = COLUMN_USER_EMAIL + " = ?";
         String[] selectionArgs = {email};
@@ -202,6 +210,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 user.setUserName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
                 user.setUserEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
                 user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
+                user.setProfilePicture(cursor.getBlob(cursor.getColumnIndex(COLUMN_USER_PROFILE_PICTURE)));
         }
         cursor.close();
         db.close();
