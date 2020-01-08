@@ -171,6 +171,7 @@ public class DetailFragment extends Fragment {
     }
 
     public boolean containsId(){
+        if (favoritMovieList == null) return false;
         Movie tempMovie;
         for(int i=0; i<favoritMovieList.size();++i){
             tempMovie = favoritMovieList.get(i);

@@ -10,9 +10,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,7 +24,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -76,6 +82,10 @@ public class ProfileFragment extends Fragment {
         tv_name.append(user.getUserName());
         tv_email.append(email);
 
+        if(user.getProfilePicture() != null){
+            img_v.setImageBitmap(user.getProfilePictureBitmap());
+        }
+
 
         btn_choose_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +121,12 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 saveToInternalStorage();
 
+                try {
+                    user.setProfilePicture(scaleProfilePicture());
+                    databaseHelper.updateUser(user);
+                }
+                catch (NullPointerException e){
+                }
                 Fragment fragment = new HomeFragment();
                 Bundle args = new Bundle();
                 args.putString("email", email);
@@ -147,6 +163,24 @@ public class ProfileFragment extends Fragment {
                 bm = bitmapImage;
             }
     }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.top_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     public void saveToInternalStorage( ){
@@ -186,5 +220,23 @@ public class ProfileFragment extends Fragment {
             return  false;
         }
 
+    }
+
+    private Bitmap scaleProfilePicture(){
+        Bitmap image = ((BitmapDrawable) img_v.getDrawable()).getBitmap();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float ratio = (float) width/height;
+
+        if (ratio > 1){
+            width = 400;
+            height = (int) (width / ratio);
+        }
+        else{
+            height = 400;
+            width = (int) (height * ratio);
+        }
+
+        return Bitmap.createScaledBitmap(image, width, height, false);
     }
 }
