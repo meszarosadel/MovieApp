@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.movieapp.Adapters.RelatedMovieListAdapter;
 import com.example.movieapp.BuildConfig;
 import com.example.movieapp.Database.DatabaseHelper;
 import com.example.movieapp.Interfaces.GetQueries;
@@ -32,12 +33,19 @@ import retrofit2.Response;
 public class DetailFragment extends Fragment {
 
     private Movie movie;
+    private Call<Page> pageCall;
+    private Call<Images> imageCall;
 
+    private RecyclerView recyclerViewGallery;
+    private RecyclerView recyclerViewRelatedMovies;
     private TextView textViewTitle;
     private TextView textViewOverview;
     private Button buttonSave;
 
-
+    private RecyclerView.LayoutManager galleryLayoutManager;
+    private RecyclerView.LayoutManager relatedLayoutManager;
+    private RelatedMovieListAdapter relatedListAdapter;
+    //private GalleryAdapter galleryAdapter;
 
     private DatabaseHelper databaseHelper;
     public DetailFragment() {
@@ -52,7 +60,7 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_detail, container, false);
 
-
+        recyclerViewRelatedMovies = view.findViewById(R.id.recyclerView_Details_RelatedMovies);
         textViewTitle = view.findViewById(R.id.textView_Details_Title);
         textViewOverview = view.findViewById(R.id.textView_Details_Overview);
         buttonSave = view.findViewById(R.id.button_Details_Save);
@@ -79,7 +87,29 @@ public class DetailFragment extends Fragment {
     }
 
     private void getSimilarMovies(){
+        GetQueries getQuery = Network.getRetrofit().create(GetQueries.class);
 
+        pageCall = getQuery.getSimilar(movie.getId(), 1, BuildConfig.API_KEY);
+
+        pageCall.enqueue(new Callback<Page>() {
+            @Override
+            public void onResponse(Call<Page> call, Response<Page> response) {
+                if (relatedListAdapter == null) {
+                    relatedLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    relatedListAdapter = new RelatedMovieListAdapter(response.body().getResults(), getContext());
+                    recyclerViewRelatedMovies.setLayoutManager(relatedLayoutManager);
+                    recyclerViewRelatedMovies.setAdapter(relatedListAdapter);
+                } else {
+                    relatedListAdapter.updateMovies(response.body().getResults());
+                    relatedListAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Page> call, Throwable t) {
+                Toast.makeText(getContext(), "An error occurred.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
